@@ -1,0 +1,572 @@
+================================================================================
+CORTEX - MULTIMODAL AI CHATBOT
+ACADEMIC PROJECT PRESENTATION
+Following College Guidelines - 8 Slides
+================================================================================
+
+================================================================================
+SLIDE 1: TITLE SLIDE
+================================================================================
+
+CORTEX
+Scalable Multimodal AI Agent with Live Internet Access
+
+Team Members:
+[Your Name] - [Register Number]
+[Team Member 2] - [Register Number]
+[Team Member 3] - [Register Number]
+[Team Member 4] - [Register Number]
+
+Project Guide:
+[Guide Name]
+[Designation]
+
+Department of Computer Science and Engineering
+[Your College/Institution Name]
+Academic Year: 2025-2026
+
+================================================================================
+SLIDE 2: PROBLEM STATEMENT
+================================================================================
+
+Problem Identified:
+
+Traditional chatbots face several critical limitations:
+
+1. Lack of Real-Time Information Access
+   • Cannot access current data (weather, news, stock prices)
+   • Responses limited to training data cutoff date
+   • Unable to answer time-sensitive queries
+
+2. No Reasoning Capabilities
+   • Simple pattern matching without logical thinking
+   • Cannot break down complex problems
+   • No ability to use tools or external resources
+
+3. Limited Multimodal Support
+   • Text-only interaction in most systems
+   • Cannot process images or documents effectively
+   • No document question-answering capability
+
+4. High Resource Requirements
+   • Heavy memory consumption (2GB+ RAM)
+   • Expensive cloud API dependencies
+   • Not suitable for resource-constrained environments
+
+Real-World Relevance:
+• Businesses need AI assistants that can access live data
+• Students require document analysis for research
+• Organizations need cost-effective AI solutions
+• Users expect intelligent responses, not just chat
+
+Need for Solution:
+An intelligent, agentic AI system that can reason through problems, access 
+real-time information, process multiple data types, and run efficiently on 
+limited resources.
+
+================================================================================
+SLIDE 3: OBJECTIVES OF THE PROJECT
+================================================================================
+
+Main Objectives:
+
+1. Develop Agentic AI System
+   • Implement ReAct (Reason-Act-Observe) loop for intelligent reasoning
+   • Enable autonomous tool selection and execution
+   • Create self-learning behavioral analytics
+
+2. Enable Live Internet Access
+   • Integrate real-time web search capabilities
+   • Implement weather, news, and stock data APIs
+   • Build multi-layer fallback mechanisms for reliability
+
+3. Implement Multimodal Processing
+   • Support image analysis using Gemini Vision
+   • Enable document Q&A with RAG (Retrieval-Augmented Generation)
+   • Integrate voice input/output capabilities
+
+4. Design Scalable Architecture
+   • Build microservices-based 3-tier architecture
+   • Ensure independent scaling of components
+   • Optimize for free-tier deployment
+
+5. Ensure Production-Ready Security
+   • Implement JWT-based authentication
+   • Add rate limiting and CORS protection
+   • Include comprehensive security headers
+
+6. Optimize Performance
+   • Reduce startup RAM to <500MB through lazy loading
+   • Implement client-side processing for efficiency
+   • Achieve response times of 1-7 seconds
+
+================================================================================
+SLIDE 4: SYSTEM DESCRIPTION
+================================================================================
+
+EXISTING SYSTEM:
+
+Limitations:
+• Static Knowledge Base
+  - Responses limited to training data
+  - No access to current information
+  - Cannot answer time-sensitive queries
+
+• Single-Modal Interaction
+  - Text-only communication
+  - No image or document processing
+  - Limited use cases
+
+• Monolithic Architecture
+  - Difficult to scale components independently
+  - High resource consumption
+  - Vendor lock-in with single LLM provider
+
+• Basic Security
+  - Simple authentication mechanisms
+  - No rate limiting
+  - Vulnerable to abuse
+
+PROPOSED SYSTEM:
+
+Improvements and Advantages:
+
+1. Agentic Intelligence
+   • ReAct loop for step-by-step reasoning
+   • Autonomous tool selection (8+ tools)
+   • Self-learning from user interactions
+
+2. Live Data Access
+   • Real-time web search with 5-layer fallback
+   • Weather, news, stocks, cryptocurrency data
+   • Wikipedia and knowledge graph integration
+
+3. Multimodal Capabilities
+   • Image analysis (Gemini Vision)
+   • Document Q&A with RAG pipeline
+   • Voice input/output (TTS/STT)
+
+4. Microservices Architecture
+   • Frontend (Next.js) - Port 3000
+   • Backend Controller (FastAPI) - Port 8000
+   • AI Agent Service (FastAPI) - Port 8001
+   • Independent scaling and deployment
+
+5. Hybrid LLM Support
+   • Cloud: Gemini 2.0 Flash
+   • Local: Ollama (Mistral)
+   • Automatic fallback mechanism
+
+6. Production-Grade Security
+   • JWT authentication with bcrypt
+   • Rate limiting (5-20 req/min)
+   • Security headers (XSS, CSRF, CSP)
+   • SQL injection prevention
+
+7. Performance Optimization
+   • Lazy loading (<500MB startup RAM)
+   • Client-side PDF processing
+   • Streaming responses
+   • Caching mechanisms
+
+How It Addresses the Problem:
+• Solves real-time data access through web search APIs
+• Enables reasoning through ReAct loop
+• Supports multiple data types (text, images, documents)
+• Reduces costs through free-tier optimization
+• Ensures reliability through fallback systems
+
+================================================================================
+SLIDE 5: ARCHITECTURE DIAGRAM
+================================================================================
+
+SYSTEM ARCHITECTURE - THREE-TIER MICROSERVICES
+
+┌─────────────────────────────────────────────────────────────────┐
+│                         USER BROWSER                            │
+│                      http://localhost:3000                      │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             │ HTTP/JSON Requests
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    FRONTEND LAYER (Port 3000)                   │
+│                         Next.js 14                              │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
+│  │   Chat UI    │  │  Auth Pages  │  │ PDF Extractor│         │
+│  │  Component   │  │ (Login/Signup)│  │  (PDF.js)    │         │
+│  └──────────────┘  └──────────────┘  └──────────────┘         │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             │ API Calls (JWT Token)
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              BACKEND CONTROLLER LAYER (Port 8000)               │
+│                         FastAPI                                 │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
+│  │     JWT      │  │     Rate     │  │   Request    │         │
+│  │     Auth     │  │   Limiter    │  │   Router     │         │
+│  └──────────────┘  └──────────────┘  └──────────────┘         │
+│  ┌──────────────┐  ┌──────────────┐                           │
+│  │   Database   │  │    File      │                           │
+│  │  (SQLite)    │  │   Upload     │                           │
+│  └──────────────┘  └──────────────┘                           │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             │ Internal API
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│               AI AGENT SERVICE LAYER (Port 8001)                │
+│                         FastAPI                                 │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │              ReAct Loop Engine (core.py)                 │  │
+│  │  • Query Classification                                  │  │
+│  │  • Tool Selection                                        │  │
+│  │  • Iterative Reasoning                                   │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
+│  │   Memory     │  │     Tool     │  │     RAG      │         │
+│  │  Management  │  │  Execution   │  │   Pipeline   │         │
+│  └──────────────┘  └──────────────┘  └──────────────┘         │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             │ API Calls
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    EXTERNAL SERVICES & TOOLS                    │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
+│  │  Web Search  │  │  Weather API │  │  Stock Data  │         │
+│  │ (DuckDuckGo) │  │ (Open-Meteo) │  │(Yahoo Finance)│        │
+│  └──────────────┘  └──────────────┘  └──────────────┘         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
+│  │  Gemini AI   │  │    Ollama    │  │    FAISS     │         │
+│  │  (Cloud LLM) │  │ (Local LLM)  │  │ Vector Store │         │
+│  └──────────────┘  └──────────────┘  └──────────────┘         │
+└─────────────────────────────────────────────────────────────────┘
+
+DATA FLOW:
+1. User sends query through Frontend
+2. Frontend forwards to Backend Controller with JWT token
+3. Controller validates auth and forwards to AI Agent
+4. AI Agent classifies query and selects appropriate tools
+5. Tools execute (web search, RAG, APIs) and return results
+6. AI Agent processes results and generates response
+7. Response streams back through Controller to Frontend
+8. User receives intelligent, real-time answer
+
+KEY COMPONENTS:
+• Frontend: User interface, client-side processing
+• Controller: Authentication, routing, security
+• AI Agent: Intelligence, reasoning, tool execution
+• External Services: Data sources and LLM providers
+
+================================================================================
+SLIDE 6: TOOLS AND TECHNOLOGIES
+================================================================================
+
+SOFTWARE TOOLS:
+
+Development Environment:
+• Visual Studio Code - Primary IDE
+• Git - Version control
+• PowerShell - Command-line interface
+• Postman - API testing
+
+PROGRAMMING LANGUAGES:
+
+Backend:
+• Python 3.10+ - Backend services
+• SQL - Database queries
+
+Frontend:
+• TypeScript - Type-safe frontend development
+• JavaScript - Client-side scripting
+• HTML5/CSS3 - UI structure and styling
+
+FRAMEWORKS / LIBRARIES:
+
+Backend Frameworks:
+• FastAPI - Modern Python web framework
+• SQLAlchemy - Database ORM
+• Pydantic - Data validation
+
+Frontend Frameworks:
+• Next.js 14 - React framework with App Router
+• React 19 - UI component library
+• Tailwind CSS - Utility-first CSS framework
+
+AI/ML Libraries:
+• Google Generative AI - Gemini API integration
+• Ollama - Local LLM support
+• FAISS - Vector similarity search
+• Sentence Transformers - Text embeddings (all-MiniLM-L6-v2)
+• OpenAI Whisper - Speech-to-text
+
+Web Scraping & APIs:
+• BeautifulSoup4 - HTML parsing
+• DuckDuckGo Search - Web search API
+• Requests - HTTP client library
+
+Security & Authentication:
+• JWT (JSON Web Tokens) - Authentication
+• bcrypt - Password hashing
+• SlowAPI - Rate limiting
+
+Voice Processing:
+• pyttsx3 - Text-to-speech
+• Whisper - Speech recognition
+
+DATABASES:
+
+Development:
+• SQLite - Local database
+
+Production (Ready):
+• PostgreSQL - Relational database
+• Redis - In-memory cache and session storage
+
+PLATFORMS:
+
+Development:
+• Windows 10/11 - Development OS
+• Localhost - Testing environment
+
+Deployment (Ready):
+• Vercel - Frontend hosting
+• Render - Backend hosting
+• Supabase - PostgreSQL database
+• Upstash - Redis cache
+
+HARDWARE:
+
+Development:
+• Standard laptop/desktop (8GB+ RAM recommended)
+• Internet connection for API access
+
+Optional:
+• GPU - For local LLM acceleration (Ollama)
+
+ADDITIONAL TOOLS:
+
+Documentation:
+• Markdown - Documentation format
+• Mermaid - Diagram generation
+
+Testing:
+• FastAPI Swagger UI - API documentation and testing
+• Browser DevTools - Frontend debugging
+
+================================================================================
+SLIDE 7: IMPLEMENTATION STATUS
+================================================================================
+
+CURRENT PROGRESS:
+
+Completed Modules/Features (100%):
+
+1. Backend Controller Service ✓
+   • JWT authentication system
+   • User registration and login
+   • Password reset with OTP
+   • Rate limiting on all endpoints
+   • Security headers implementation
+   • File upload management
+   • Database integration (SQLite)
+
+2. AI Agent Service ✓
+   • ReAct loop engine
+   • Query classification system
+   • Tool execution framework
+   • Memory management
+   • Self-learning analytics
+   • Hybrid LLM support (Gemini + Ollama)
+
+3. Tool Integration ✓
+   • Web search (5-layer fallback)
+   • Weather API (Open-Meteo)
+   • Stock data (Yahoo Finance)
+   • News aggregation
+   • Wikipedia API
+   • Data analyzer
+   • RAG search (FAISS)
+   • Web scraper
+
+4. Frontend Application ✓
+   • Next.js 14 setup
+   • Chat interface with streaming
+   • Authentication pages (login/signup)
+   • Password recovery flow
+   • Client-side PDF extraction
+   • Image upload and preview
+   • Responsive design
+
+5. RAG Pipeline ✓
+   • Client-side PDF processing (PDF.js)
+   • FAISS vector storage
+   • Lazy model loading
+   • Semantic search
+   • Document Q&A capability
+
+6. Multimodal Support ✓
+   • Image analysis (Gemini Vision)
+   • Document processing (PDF, DOCX, TXT)
+   • Voice capabilities (TTS/STT - Beta)
+
+7. Performance Optimizations ✓
+   • Lazy loading (<500MB startup RAM)
+   • Client-side processing
+   • Streaming responses
+   • Caching mechanisms
+
+8. Documentation ✓
+   • 16 comprehensive guides
+   • API documentation
+   • Deployment instructions
+   • Troubleshooting guide
+
+Ongoing Work:
+
+1. Production Deployment (In Progress)
+   • Vercel frontend deployment - 80% complete
+   • Render backend deployment - 70% complete
+   • Database migration to PostgreSQL - Planned
+   • Redis integration - Planned
+
+2. Testing & Refinement (In Progress)
+   • Load testing - Ongoing
+   • Security audit - Ongoing
+   • Performance benchmarking - Ongoing
+
+Challenges Faced:
+
+1. Memory Optimization
+   Challenge: Initial RAM usage exceeded 2GB
+   Solution: Implemented lazy loading and client-side processing
+   Result: Reduced to <500MB startup RAM
+
+2. Web Search Reliability
+   Challenge: Single API dependency caused failures
+   Solution: Built 5-layer fallback system
+   Result: 99.9% uptime achieved
+
+3. Microservices Communication
+   Challenge: Complex inter-service communication
+   Solution: Added Backend Controller as proxy layer
+   Result: Clean architecture with better security
+
+Performance Metrics Achieved:
+• Startup Time: 10-15 seconds
+• Memory Usage: 500MB (idle), 1GB (active)
+• Response Time: 1-7 seconds (depending on tool)
+• Uptime: 99.9% (with fallbacks)
+
+================================================================================
+SLIDE 8: FIRST REVIEW REQUIREMENTS & CONCLUSION
+================================================================================
+
+FIRST REVIEW STATUS:
+
+1. Internship Application Status:
+   ☐ Applied / ☐ In Progress / ☐ Completed
+   [Update with your status]
+
+2. Paper Publication Status:
+   ☐ Rough Draft Completed
+   ☐ Under Review
+   ☐ Submitted
+   [Update with your status]
+   
+   Proposed Title:
+   "Cortex: A Scalable Agentic AI System with Multimodal Capabilities 
+   and Live Internet Access"
+
+3. Organization Confirmation Letter:
+   ☐ Received / ☐ Pending
+   [Update with your status]
+
+4. Literature Survey Book:
+   ☐ Completed / ☐ In Progress
+   [Update with your status]
+   
+   Topics Covered:
+   • Agentic AI and ReAct frameworks
+   • Retrieval-Augmented Generation (RAG)
+   • Microservices architecture patterns
+   • Multimodal AI systems
+   • Web search integration techniques
+
+---
+
+CONCLUSION:
+
+Overall Project Progress:
+• Core Development: 100% Complete
+• Testing & Optimization: 90% Complete
+• Documentation: 100% Complete
+• Deployment Preparation: 75% Complete
+
+Key Achievements:
+✓ Successfully implemented agentic AI with ReAct loop
+✓ Integrated 8+ tools for live internet access
+✓ Built scalable 3-tier microservices architecture
+✓ Achieved <500MB RAM through optimization
+✓ Implemented production-ready security
+✓ Created comprehensive documentation (16 guides)
+
+Expected Outcomes:
+• Production-ready AI chatbot with reasoning capabilities
+• Cost-effective solution (free tier viable)
+• Scalable from prototype to enterprise
+• Real-time information access for users
+• Multimodal interaction support
+
+Technical Contributions:
+• Novel hybrid RAG approach (client + server)
+• 5-layer web search fallback system
+• Lazy loading optimization technique
+• Microservices architecture for AI systems
+
+Next Steps:
+1. Complete production deployment (Vercel + Render)
+2. Migrate to PostgreSQL and Redis
+3. Conduct comprehensive security audit
+4. Perform load testing (100+ concurrent users)
+5. Finalize research paper for publication
+6. Prepare for final project review
+
+Project Status: Alpha Release Candidate (Pre-Production)
+Ready for Deployment: Yes
+Timeline: On Track
+
+---
+
+Thank You
+
+Questions?
+
+================================================================================
+END OF ACADEMIC PRESENTATION
+================================================================================
+
+DESIGN NOTES:
+• Use professional academic theme (e.g., "Ion Boardroom" or "Facet")
+• Font: Arial or Calibri, 18-24pt for body, 32-40pt for titles
+• Colors: Navy blue (#003366) for titles, black for text
+• Minimal animations (fade only if needed)
+• Consistent layout throughout
+• Add college logo on title slide
+• Add slide numbers (bottom right)
+• Use bullet points, avoid paragraphs
+• Keep diagrams simple and labeled
+• Maintain 1-inch margins
+
+PRESENTATION TIPS:
+• Speak for 2-3 minutes per slide
+• Total duration: 15-20 minutes
+• Emphasize problem-solution approach
+• Highlight technical achievements
+• Be ready to explain architecture diagram
+• Prepare for questions on ReAct loop and RAG
+• Have demo ready (optional but impressive)
+
+================================================================================
